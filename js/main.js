@@ -1,6 +1,10 @@
 
 const controle = document.querySelectorAll("[data-controle]")
 const estatisticas = document.querySelectorAll("[data-estatistica")
+const setas_mudar_cor = document.querySelectorAll("[data-botao-mudar-robo]")
+const robo = document.querySelector("#robotron")
+const cores = ["amarelo", "branco", "azul", "preto", "rosa", "vermelho"]
+let cores_index = 0
 
 const pecas = {
     "bracos": {
@@ -36,10 +40,18 @@ const pecas = {
     }
 }
 
+atualizarImgRobo(cores[cores_index])
+
 controle.forEach((elemento)=> {
     elemento.addEventListener("click", (evento) => {
         manipulaDados(evento.target.dataset.controle, evento.target.parentNode)
         atualizaEstatisticas(evento.target.dataset.controle, evento.target.dataset.peca)
+    })
+})
+
+setas_mudar_cor.forEach((elemento) => {
+    elemento.addEventListener("click", (evento) => {
+        mudarCorDoRobo(evento.target)
     })
 })
 
@@ -61,4 +73,24 @@ function atualizaEstatisticas(operacao, peca) {
             elemento.textContent = parseInt(elemento.textContent) + pecas[peca][elemento.dataset.estatistica]
         }
     })
+}
+
+function mudarCorDoRobo(botao) {
+    if(botao.dataset.botaoMudarRobo === "esquerda"){
+        cores_index = cores_index - 1
+        if(cores_index === -1){
+            cores_index = cores.length - 1
+        }
+    }else{
+        cores_index = cores_index + 1
+        if(cores_index >= cores.length){
+            cores_index = 0
+        }
+    }
+
+    atualizarImgRobo(cores[cores_index])
+}
+
+function atualizarImgRobo(cor){
+    robo.src = "img/" + cor + ".png"
 }
